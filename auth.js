@@ -4,21 +4,22 @@ import { authConfig } from './auth.config';
 import { z } from 'zod';
 import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcrypt';
+import { getUser } from '@/app/lib/data';
 
-async function getUser(email) {
-  try {
-    const sql = neon(`${process.env.DATABASE_URL}`);
-    const user = await sql`SELECT * FROM users WHERE email=${email}`;
-    return user.rows[0];
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
-  }
-}
+// async function getUser(email) {
+//   try {
+//     const sql = neon(`${process.env.DATABASE_URL}`);
+//     const user = await sql`SELECT * FROM users WHERE email=${email}`;
+//     return user.rows[0];
+//   } catch (error) {
+//     console.error('Failed to fetch user:', error);
+//     throw new Error('Failed to fetch user.');
+//   }
+// }
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
-//   secret: process.env.AUTH_SECRET,
+ secret: process.env.AUTH_SECRET,
   providers: [
     Credentials({
       async authorize(credentials) {
